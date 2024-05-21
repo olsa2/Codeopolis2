@@ -2,7 +2,7 @@ package de.htwsaar.sarkhovska.exercises.matrix;
 
 public class MatrixTest {
     public static void main(String[] args) {
-        Matrix<Integer> mi = new Matrix<>(3,3,0);
+        Matrix mi = new Matrix(3,3);
         for (int i = 0; i < 3; i++) {
             mi.set(i, 0, i+1);
             mi.set(i, 1, i+1);
@@ -11,7 +11,7 @@ public class MatrixTest {
         System.out.println("Integer matrix");
         System.out.println(mi);
 
-        Matrix<Double> md = new Matrix<>(3,3,0.0);
+        Matrix md = new Matrix(3,3);
         for (int i = 0; i < 3; i++) {
             md.set(i, 0, 1.0 * (i+1));
             md.set(i, 1, 1.0* (i+1));
@@ -20,11 +20,11 @@ public class MatrixTest {
         System.out.println("Double matrix");
         System.out.println(md);
 
-        Matrix<Double> addition = mi.add(md);
+        Matrix addition = mi.add(md);
         System.out.println("Addition");
         System.out.println(addition);
 
-        Matrix<Double> multiply = mi.multiplyByScalar(2f);
+        Matrix multiply = mi.multiplyByScalar(2f);
         System.out.println("Multiply by scalar " + 2f);
         System.out.println(multiply);
     }

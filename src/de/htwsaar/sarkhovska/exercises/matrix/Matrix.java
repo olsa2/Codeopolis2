@@ -1,15 +1,14 @@
 package de.htwsaar.sarkhovska.exercises.matrix;
 
-public class Matrix<T extends Number>  {
-    private Number[][] matrix;
-    private T zero;
+public class Matrix  {
+    private final Number[][] matrix;
 
 
-    public Matrix(int rows, int cols, T zero) {
+    public Matrix(int rows, int cols) {
         matrix = new Number[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                matrix[i][j] = zero;
+                matrix[i][j] = 0; //zero;
             }
         }
     }
@@ -22,15 +21,15 @@ public class Matrix<T extends Number>  {
         return matrix[0].length;
     }
 
-    public  void set(int row, int col, T value) {
+    public  void set(int row, int col, Number value) {
         matrix[row][col] = value;
     }
 
-    public T get(int row, int col) {
-        return (T) matrix[row][col];
+    public  Number get(int row, int col) {
+        return matrix[row][col];
     }
 
-    public <U extends Number> Matrix<Double> add(Matrix<U> other) {
+    public Matrix add(Matrix other) {
         if (other == null) {
             throw new IllegalArgumentException("Other matrix cannot be null");
         }
@@ -38,7 +37,7 @@ public class Matrix<T extends Number>  {
             throw new IllegalArgumentException("Other matrix has not the same size");
         }
 
-        Matrix<Double> result = new Matrix<Double>(getRowNumber(),getColNumber(),0.0);
+        Matrix result = new Matrix(getRowNumber(),getColNumber());
 
         for (int i = 0; i < getRowNumber(); i++) {
             for (int j = 0; j < getColNumber(); j++) {
@@ -49,8 +48,8 @@ public class Matrix<T extends Number>  {
         return result;
     }
 
-    public <U extends Number> Matrix<Double> multiplyByScalar(U value) {
-        Matrix<Double> result = new Matrix<Double>(getRowNumber(),getColNumber(),0.0);
+    public Matrix multiplyByScalar(Number value) {
+        Matrix result = new Matrix(getRowNumber(),getColNumber());
         for (int i = 0; i < getRowNumber(); i++) {
             for (int j = 0; j < getColNumber(); j++) {
                 result.set(i,j,matrix[i][j].doubleValue() * value.doubleValue());
