@@ -1,8 +1,8 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
-public class LinkedList <T> {
+public class LinkedList <T extends Comparable<T>> {
 
-    private  class Node<T> {
+    private static class Node<T> {
         T element;
         Node<T> next;
 
@@ -16,9 +16,46 @@ public class LinkedList <T> {
         }
     }
 
+    private class Iterator implements java.util.Iterator<T> {
+        Node<T> current;
+        boolean started=false;
+        boolean finished=false;
+
+        @Override
+        public boolean hasNext() {
+            if (finished) {
+                return false;
+            }
+
+            if (!started) {
+                started=true;
+                current = head;
+            }
+            else {
+                if (current != null) {
+                    current = current.next;
+                }
+            }
+            if (current == null) {
+                finished=true;
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public T next() {
+            return current!=null?current.element:null;
+        }
+    }
+
     Node<T> head;
 
     public LinkedList() {
+    }
+
+    public java.util.Iterator<T> iterator() {
+        return new Iterator();
     }
 
     private Node<T> getLast() {
@@ -95,11 +132,40 @@ public class LinkedList <T> {
             prev = node;
             node = node.next;
         }
-        if (prev==null || node==null) {
-            return null;
+        if (prev!=null && node!=null) {
+            prev.next = null;
+            return node.element;
         }
-        prev.next = null;
-        return node.element;
+        if (index == 0) {
+            head = null;
+        }
+        return null;
+    }
+
+    public  void sort() {
+        if (head==null) {
+            return;
+        }
+
+        int size = size() - 1;
+
+        while (size-- > 0) {
+            boolean swapped = false;
+            for(int i=0; i < size; i++) {
+                T e1 = get(i);
+                T e2 = get(i+1);
+                if (e1.compareTo(e2) > 0) {
+                    T temp = e1;
+                    set(i,e2);
+                    set(i+1,temp);
+                    swapped = true;
+                }
+            }
+            if(!swapped) {
+                break;
+            }
+        }
+
     }
 
 }
