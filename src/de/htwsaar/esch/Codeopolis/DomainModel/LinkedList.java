@@ -78,10 +78,10 @@ public class LinkedList <T extends Comparable<T>> {
     }
 
     public T removeFirst() {
-        Node<T> result = head;
-        if (result!= null) {
-            head = result.next;
-            return result.element;
+        Node<T> node = head;
+        if (node!= null) {
+            head = node.next;
+            return node.element;
         }
         return null;
     }
@@ -126,20 +126,29 @@ public class LinkedList <T extends Comparable<T>> {
     }
 
     public T remove(int index) {
-        Node<T> node = head;
-        Node<T> prev = null;
-        while (index-- != 0 && node != null) {
-            prev = node;
-            node = node.next;
-        }
-        if (prev!=null && node!=null) {
-            prev.next = null;
-            return node.element;
-        }
         if (index == 0) {
-            head = null;
+            return removeFirst();
         }
-        return null;
+
+        Node<T> prev = head;
+        index--;
+
+        while (index-- != 0 && prev != null) {
+            prev = prev.next;
+        }
+
+        if (prev==null) {
+            return null;
+        }
+
+        if (prev.next == null) {
+            return null;
+        }
+
+        T element = prev.next.element;
+        prev.next = null;
+
+        return element;
     }
 
     public  void sort() {
@@ -155,9 +164,8 @@ public class LinkedList <T extends Comparable<T>> {
                 T e1 = get(i);
                 T e2 = get(i+1);
                 if (e1.compareTo(e2) > 0) {
-                    T temp = e1;
                     set(i,e2);
-                    set(i+1,temp);
+                    set(i+1,e1);
                     swapped = true;
                 }
             }
