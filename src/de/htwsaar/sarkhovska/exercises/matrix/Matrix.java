@@ -1,12 +1,12 @@
 package de.htwsaar.sarkhovska.exercises.matrix;
 
 public class Matrix<T extends Number>  {
-    private T[][] matrix;
+    private Number[][] matrix;
     private T zero;
 
 
     public Matrix(int rows, int cols, T zero) {
-        matrix = (T[][])  new Object[rows][cols];
+        matrix = new Number[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 matrix[i][j] = zero;
@@ -27,7 +27,7 @@ public class Matrix<T extends Number>  {
     }
 
     public T get(int row, int col) {
-        return matrix[row][col];
+        return (T) matrix[row][col];
     }
 
     public <U extends Number> Matrix<Double> add(Matrix<U> other) {
@@ -55,6 +55,20 @@ public class Matrix<T extends Number>  {
             for (int j = 0; j < getColNumber(); j++) {
                 result.set(i,j,matrix[i][j].doubleValue() * value.doubleValue());
             }
+        }
+        return result;
+    }
+
+    public String   toString() {
+        String result = "";
+        for (int i = 0; i < getRowNumber(); i++) {
+            for (int j=0; j< getColNumber(); ++j) {
+                if (j>0) {
+                    result += "\t";
+                }
+                result = result + matrix[i][j];
+            }
+            result += "\n";
         }
         return result;
     }
