@@ -39,7 +39,7 @@ public class Depot {
                 this.silos.addLast(new Silo(silosArray[i]));
             }
         }
-    }
+      }
 
     /**
      * Retrieves the current fill level of the depot for a specific grain type.
@@ -48,7 +48,12 @@ public class Depot {
      * @return The total amount of grain stored in the depot for the specified grain type.
      */
     public int getFillLevel(Game.GrainType grainType) {
-        int totalFillLevel = 0;
+    	Number n = silos.sum(silo -> silo.getGrainType() == grainType ? silo.getFillLevel() : 0.0);
+    	return n.intValue();
+    	
+        /*
+         int totalFillLevel = 0;
+         
         Iterator<Silo> iter = silos.iterator();
         while (iter.hasNext()) {
         	Silo silo = iter.next();
@@ -59,6 +64,7 @@ public class Depot {
         }
         
         return totalFillLevel;
+        */
     }
 
     /**
@@ -92,12 +98,16 @@ public class Depot {
      * @return The total amount of bushels stored in the depot.
      */
     public int getTotalFillLevel() {
-        int totalBushels = 0;
+    	Number n = silos.sum(silo -> (double)silo.getFillLevel());
+    	return n.intValue();
+    	/*
+    	int totalBushels = 0;
         Iterator<Silo> iter = silos.iterator();
         while (iter.hasNext()) {
         	totalBushels += iter.next().getFillLevel();
         }
         return totalBushels;
+        */
     }
 
     /**
