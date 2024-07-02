@@ -153,7 +153,8 @@ public class Silo implements Serializable, Comparable<Silo> {
      * @return The number of harvests currently stored in the silo.
      */
     public int getFillLevel() {
-    	return this.fillLevel;
+    	return stock.stream().map(h->h.getAmount()).reduce(0,(n1,n2)->n1+n2);
+    	//return this.fillLevel;
     }
 
     /**
@@ -196,6 +197,10 @@ public class Silo implements Serializable, Comparable<Silo> {
      * @return The total amount of grain that decayed in all harvests in the silo.
      */
     public int decay(int currentYear) {
+    	int totalDecayedAmount = stock.stream().map(h->h.decay(currentYear)).reduce(0,Integer::sum);
+    	fillLevel -= totalDecayedAmount;
+    	return totalDecayedAmount;
+    	/*
     	class Vars {
     		int totalDecayedAmount = 0;
     	}
@@ -207,6 +212,7 @@ public class Silo implements Serializable, Comparable<Silo> {
         fillLevel -= vars.totalDecayedAmount;
         
         return vars.totalDecayedAmount;
+        */
     }
 
     @Override
