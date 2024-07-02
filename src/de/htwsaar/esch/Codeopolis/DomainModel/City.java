@@ -60,12 +60,12 @@ public class City extends GameEntity {
     {
     	this.depot = new Depot(GrainType.values().length, this.config.getSiloCapacity());
     	this.planted = new Grain[GrainType.values().length];
-    	this.depot.store(Harvest.createHarvest(GrainType.BARLEY, this.config.getInitialBushels(GrainType.BARLEY.ordinal()), this.year));
-    	this.depot.store(Harvest.createHarvest(GrainType.CORN, this.config.getInitialBushels(GrainType.CORN.ordinal()), this.year));
-    	this.depot.store(Harvest.createHarvest(GrainType.MILLET, this.config.getInitialBushels(GrainType.MILLET.ordinal()), this.year));
-    	this.depot.store(Harvest.createHarvest(GrainType.RICE, this.config.getInitialBushels(GrainType.RICE.ordinal()), this.year));
-    	this.depot.store(Harvest.createHarvest(GrainType.RYE, this.config.getInitialBushels(GrainType.RYE.ordinal()), this.year));
-    	this.depot.store(Harvest.createHarvest(GrainType.WHEAT, this.config.getInitialBushels(GrainType.WHEAT.ordinal()), this.year));
+    	this.depot.store(Harvest.createHarvest(GrainType.BARLEY, this.config.getInitialBushels(GrainType.BARLEY.ordinal()), this.year,10));
+    	this.depot.store(Harvest.createHarvest(GrainType.CORN, this.config.getInitialBushels(GrainType.CORN.ordinal()), this.year,10));
+    	this.depot.store(Harvest.createHarvest(GrainType.MILLET, this.config.getInitialBushels(GrainType.MILLET.ordinal()), this.year,10));
+    	this.depot.store(Harvest.createHarvest(GrainType.RICE, this.config.getInitialBushels(GrainType.RICE.ordinal()), this.year,10));
+    	this.depot.store(Harvest.createHarvest(GrainType.RYE, this.config.getInitialBushels(GrainType.RYE.ordinal()), this.year,10));
+    	this.depot.store(Harvest.createHarvest(GrainType.WHEAT, this.config.getInitialBushels(GrainType.WHEAT.ordinal()), this.year,10));
     	
     	this.acres = config.getInitialAcres();
     	this.residents = config.getInitialResidents();
@@ -279,7 +279,7 @@ public class City extends GameEntity {
                 bushels++;
                 remainder--;
             }
-            harvests[grainType.ordinal()] = Harvest.createHarvest(grainType, bushels, year);
+            harvests[grainType.ordinal()] = Harvest.createHarvest(grainType, bushels, year,10);
         }
         return harvests;
     }
@@ -320,6 +320,7 @@ public class City extends GameEntity {
 		boolean barleyGoutFly = this.fortune.nextFloat() > 0.8 ? true : false;
 		boolean deliaFly = this.fortune.nextFloat() > 0.8 ? true : false;
 		boolean fritFly = this.fortune.nextFloat() > 0.8 ? true : false;
+		int durabilitiy = this.fortune.nextInt(1,11);
 		
 		for(int i = 0; i< GrainType.values().length; i++) {
 			if(this.planted[i] != null) {
@@ -341,16 +342,16 @@ public class City extends GameEntity {
 				harvested[i] = this.planted[i].harvest();	
 			}
 		}		
-		Harvest[] thisYearsHarvest = new Harvest[] {Harvest.createHarvest(GrainType.BARLEY, harvested[GrainType.BARLEY.ordinal()], this.year),
-		        Harvest.createHarvest(GrainType.CORN, harvested[GrainType.CORN.ordinal()], this.year),
-		        Harvest.createHarvest(GrainType.MILLET, harvested[GrainType.MILLET.ordinal()], this.year),
-		        Harvest.createHarvest(GrainType.RICE, harvested[GrainType.RICE.ordinal()], this.year),
-		        Harvest.createHarvest(GrainType.RYE, harvested[GrainType.RYE.ordinal()], this.year),
-		        Harvest.createHarvest(GrainType.WHEAT, harvested[GrainType.WHEAT.ordinal()], this.year)};
+		Harvest[] thisYearsHarvest = new Harvest[] {Harvest.createHarvest(GrainType.BARLEY, harvested[GrainType.BARLEY.ordinal()], this.year,durabilitiy),
+		        Harvest.createHarvest(GrainType.CORN, harvested[GrainType.CORN.ordinal()], this.year,durabilitiy),
+		        Harvest.createHarvest(GrainType.MILLET, harvested[GrainType.MILLET.ordinal()], this.year,durabilitiy),
+		        Harvest.createHarvest(GrainType.RICE, harvested[GrainType.RICE.ordinal()], this.year,durabilitiy),
+		        Harvest.createHarvest(GrainType.RYE, harvested[GrainType.RYE.ordinal()], this.year,durabilitiy),
+		        Harvest.createHarvest(GrainType.WHEAT, harvested[GrainType.WHEAT.ordinal()], this.year,durabilitiy)};
 		
-		for(Harvest h : thisYearsHarvest)
+		for(Harvest h : thisYearsHarvest) 
 			this.depot.store(h); //Issue #40
-		
+				
 		//Calculation of how much grain was eaten by rats: 
 		int ateByRates = 0;
 		if(this.depot.getTotalFillLevel() > 0)
@@ -406,12 +407,12 @@ public class City extends GameEntity {
 	 */
 	public void IDKFA() {
 	    this.depot.expand(6, Integer.MAX_VALUE);
-	    this.depot.store(Harvest.createHarvest(GrainType.BARLEY, 100000, this.year));
-	    this.depot.store(Harvest.createHarvest(GrainType.CORN, 100000, this.year));
-	    this.depot.store(Harvest.createHarvest(GrainType.MILLET, 100000, this.year));
-	    this.depot.store(Harvest.createHarvest(GrainType.RICE, 100000, this.year));
-	    this.depot.store(Harvest.createHarvest(GrainType.RYE, 100000, this.year));
-	    this.depot.store(Harvest.createHarvest(GrainType.WHEAT, 100000, this.year));
+	    this.depot.store(Harvest.createHarvest(GrainType.BARLEY, 100000, this.year,10));
+	    this.depot.store(Harvest.createHarvest(GrainType.CORN, 100000, this.year,10));
+	    this.depot.store(Harvest.createHarvest(GrainType.MILLET, 100000, this.year,10));
+	    this.depot.store(Harvest.createHarvest(GrainType.RICE, 100000, this.year,10));
+	    this.depot.store(Harvest.createHarvest(GrainType.RYE, 100000, this.year,10));
+	    this.depot.store(Harvest.createHarvest(GrainType.WHEAT, 100000, this.year,10));
 	    this.acres = 1000000;
 	}
 
