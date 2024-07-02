@@ -10,16 +10,22 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
  * The Harvest class represents the annual harvest, containing information
  * about the amount of grain harvested and the year in which it occurred.
  */
-public abstract class Harvest implements Serializable{
+public abstract class Harvest implements Serializable, Comparable<Harvest> {
     private int bushels;
     private int year;
+    private int durability;
 
 
-    protected Harvest(int bushels, int year) {
+    protected Harvest(int bushels, int year, int durability) {
         this.bushels = bushels;
         this.year = year;
+        this.durability = durability;
+
     }
-    
+
+    public int compareTo(Harvest other) {
+        return this.year - other.year;
+    }
     
     /**
      * Creates a new Harvest instance based on the specified grain type, amount, and year.
@@ -35,20 +41,20 @@ public abstract class Harvest implements Serializable{
      * @throws IllegalArgumentException If the specified grain type is not recognized or if the
      *         amount or year is not positive.
      */
-    public static Harvest createHarvest(GrainType type, int amount, int year) {
+    public static Harvest createHarvest(GrainType type, int amount, int year, int durability) {
         switch(type) {
             case BARLEY:
-                return new BarleyHarvest(amount, year);
+                return new BarleyHarvest(amount, year,durability);
             case CORN:
-                return new CornHarvest(amount, year);
+                return new CornHarvest(amount, year,durability);
             case MILLET:
-                return new MilletHarvest(amount, year);
+                return new MilletHarvest(amount, year,durability);
             case RICE:
-                return new RiceHarvest(amount, year);
+                return new RiceHarvest(amount, year,durability);
             case RYE:
-                return new RyeHarvest(amount, year);
+                return new RyeHarvest(amount, year,durability);
             case WHEAT:
-                return new WheatHarvest(amount, year);
+                return new WheatHarvest(amount, year,durability);
             default:
                 throw new IllegalArgumentException("Unknown grain type: " + type);
         }
@@ -73,7 +79,7 @@ public abstract class Harvest implements Serializable{
         if (other == null) {
             throw new IllegalArgumentException("The provided harvest object cannot be null.");
         }
-        return createHarvest(other.getGrainType(), other.getAmount(), other.getYear());
+        return createHarvest(other.getGrainType(), other.getAmount(), other.getYear(),other.getDurability());
     }
 
     /**
@@ -151,7 +157,7 @@ public abstract class Harvest implements Serializable{
         }
 
         // Create a new Harvest object with the split amount of grain
-        Harvest newHarvest = Harvest.createHarvest(this.getGrainType(), amount, this.getYear());
+        Harvest newHarvest = Harvest.createHarvest(this.getGrainType(), amount, this.getYear(),this.getDurability());
 
         // Deduct the split amount from the current Harvest object
         remove(amount);
@@ -167,5 +173,9 @@ public abstract class Harvest implements Serializable{
     public Harvest copy() {
     	return Harvest.createHarvest(this);
     }
-    
+
+	public int getDurability() {
+		return durability;
+	}
+ 
 }
