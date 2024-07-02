@@ -18,8 +18,8 @@ public class BarleyHarvest extends Harvest implements Serializable{
      * @param bushels The amount of barley harvested.
      * @param year The year in which the harvest occurred.
      */
-    protected BarleyHarvest(int bushels, int year) {
-        super(bushels, year);
+    protected BarleyHarvest(int bushels, int year,int durability) {
+        super(bushels, year,durability);
     }
     
 
