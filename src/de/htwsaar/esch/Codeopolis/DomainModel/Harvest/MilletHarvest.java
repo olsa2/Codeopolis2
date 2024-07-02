@@ -18,8 +18,8 @@ public class MilletHarvest extends Harvest implements Serializable{
      * @param bushels The amount of millet harvested.
      * @param year The year in which the harvest occurred.
      */
-	protected MilletHarvest(int bushels, int year) {
-        super(bushels, year);
+	protected MilletHarvest(int bushels, int year,int durability) {
+        super(bushels, year,durability);
     }
     
 
