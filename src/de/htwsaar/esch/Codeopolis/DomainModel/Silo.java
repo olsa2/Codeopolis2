@@ -1,16 +1,21 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
 import java.util.Arrays;
+import java.util.Comparator;
+
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 
 /**
  * The Silo class represents a storage unit for a specific type of grain.
  */
 public class Silo implements Serializable, Comparable<Silo> {
     //private Harvest[] stock;
-    private LinkedList<Harvest> stock;
+	private PriorityQueue<Harvest> stock = new PriorityQueue<>(Comparator.comparing(Harvest::getDurability));
+			
+    //-----private LinkedList<Harvest> stock;
     private final int capacity;
     private int fillLevel;
 
@@ -21,7 +26,7 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public Silo(int capacity) {
         this.capacity = capacity;
-        this.stock = new LinkedList<>() ;
+        //-----this.stock = new LinkedList<>() ;
         this.fillLevel = 0;
     }
     
@@ -37,10 +42,11 @@ public class Silo implements Serializable, Comparable<Silo> {
         this.capacity = other.capacity;
         this.fillLevel = other.fillLevel;
        
-        this.stock = new LinkedList<>();
+        //this.stock = new LinkedList<>();
         
-        other.stock.forEach(harvest -> this.stock.addLast(Harvest.createHarvest(harvest)));
-       
+        //other.stock.forEach(harvest -> this.stock.addLast(Harvest.createHarvest(harvest)));
+        other.stock.forEach(harvest -> this.stock.add(Harvest.createHarvest(harvest)));
+        
     }
 
     /**
@@ -51,7 +57,7 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public Harvest store(Harvest harvest) {
     	 // Check if the grain type matches the existing grain in the silo
-        if (fillLevel > 0 && stock.get(0).getGrainType() != harvest.getGrainType()) {
+        if (fillLevel > 0 && stock.peek().getGrainType() != harvest.getGrainType()) {
             throw new IllegalArgumentException("The grain type of the given Harvest does not match the grain type of the silo");
         }
         
@@ -64,14 +70,14 @@ public class Silo implements Serializable, Comparable<Silo> {
 	        // Check if the entire harvest can be stored
 	        int remainingCapacity = this.capacity - this.fillLevel;
 	        if(harvest.getAmount() <= remainingCapacity) {
-                stock.addLast(harvest);
+                stock.add(harvest);
 	        	this.fillLevel += harvest.getAmount();
 	        	return null;
 	        }
 	        else {
 	        	// Split the harvest and store the remaining amount
 	            Harvest remainingHarvest = harvest.split(remainingCapacity);
-                stock.addLast(remainingHarvest);
+                stock.add(remainingHarvest);
 	            this.fillLevel += remainingHarvest.getAmount();
 	            return harvest; // Return the surplus amount
 	        }
@@ -166,8 +172,8 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public Game.GrainType getGrainType() {
         // Assuming each silo stores only one type of grain, we can retrieve the grain type from the first stored harvest
-        if (fillLevel > 0 && stock.get(0) != null) {
-            return stock.get(0).getGrainType();
+        if (fillLevel > 0 && stock.peek() != null) {
+            return stock.peek().getGrainType();
         } 
         else {
             return null; 
